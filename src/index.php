@@ -2,10 +2,8 @@
 $dir_path = __DIR__;
 $dirs = glob($dir_path . '/*', GLOB_ONLYDIR);
 if (count($dirs) > 0) {
-    usort($dirs, function($a, $b) {
-        return intval($a) - intval($b);
-    });
-    $largest_dir = end($dirs);
+    natsort($dirs); // Сортировка папок по числовым значениям
+    $largest_dir = end($dirs); // Получение наибольшей папки
     $dirname = basename($largest_dir);
     $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . $_SERVER['REQUEST_URI'] . '/' . $dirname;
     $current_url = str_replace("index.php", "", $current_url);
@@ -16,7 +14,7 @@ if (count($dirs) > 0) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Redirect</title>
+        <title>Масоны-ДР (Masonry-AR)</title>
         <style>
             body, html {
                 margin: 0;
@@ -32,6 +30,12 @@ if (count($dirs) > 0) {
         </style>
     </head>
     <body>
+        <script>
+        if (window.location.protocol === 'http:') {
+            var newUrl = window.location.href.replace('http:', 'https:')
+            window.location.assign(newUrl)
+        }      
+        </script>        
         <iframe src="<?php echo $current_url; ?>" frameborder="0"></iframe>
     </body>
     </html>
@@ -41,3 +45,4 @@ if (count($dirs) > 0) {
 } else {
     echo "No numeric folder in script directory!";
 }
+?>
